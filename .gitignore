@@ -1,0 +1,13 @@
+# Local orchestration records; keep locally, never publish.
+_tickets/
+_receipts/
+
+# Pi credentials and generated configuration.
+auth.json
+models.json
+
+# Runtime and temporary files.
+*.log
+*.tmp
+*.rollback.tmp
+screenshots/
