@@ -1,4 +1,8 @@
-# Pi 模型与第三方 API 管理器
+# Pi 模型与第三方 API 管理器 / Pi Models and Third-Party API Manager
+
+[中文说明](#中文说明) · [English](#english)
+
+## 中文说明
 
 一个可从任意目录复制、移动并运行的 Windows 工具，用于维护 Pi 的第三方 API 供应商、模型和登录凭据。目标电脑必须已安装并正在使用 Pi；程序只从自身目录加载脚本，不依赖原电脑的 Pi 安装路径或固定盘符。
 
@@ -26,6 +30,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\pi-model-manager.ps1
 
 不要只复制 `start.cmd`；它需要从自身目录加载 `pi-model-manager.ps1`。
 
+程序默认显示中文。在主窗口右上角选择 `English` 可切换为英语，选择 `中文` 可切回中文；供应商列表、按钮、状态信息以及之后打开的对话框会立即使用所选语言。
+
 ## Pi 配置目录规则
 
 程序在目标电脑上按以下优先级定位 Pi 配置目录：
@@ -40,6 +46,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\pi-model-manager.ps1
 
 - 新增、编辑、重命名、删除第三方供应商
 - 新增、修改、删除模型
+- 图形界面支持中文和 English，可通过窗口右上角的“语言 / Language”下拉框即时切换
 - API Key 使用密码框输入，不在界面列表或日志中显示
 - OAuth 等非 API Key 登录凭据保持只读；删除供应商时保留受保护凭据
 - 打开配置文件前会对 `auth.json` 显示敏感内容提醒
@@ -76,3 +83,75 @@ try {
 ```
 
 自动化发布测试是“临时异路径副本”的模拟，不等同于已在真实第二台电脑验证；本项目未声称完成第二台电脑实机验证。
+
+---
+
+## English
+
+A portable Windows GUI for managing Pi third-party API providers, models, and login credentials. The project can be copied to and run from any directory, including paths containing spaces. It does not depend on the original computer's Pi installation path, drive letter, or user name.
+
+### Requirements
+
+- Windows 10 or Windows 11
+- Windows PowerShell 5.1
+- Pi already installed and in use on the target computer
+- Windows Forms, included with Windows
+- No third-party PowerShell modules required
+- No network requests or API calls are made by this manager
+
+### Start the application
+
+Download or copy the complete project directory, then double-click:
+
+```text
+start.cmd
+```
+
+Alternatively, run it from PowerShell:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\pi-model-manager.ps1
+```
+
+Do not copy `start.cmd` by itself; it loads `pi-model-manager.ps1` from the same directory.
+
+The interface starts in Chinese. Use the **语言 / Language** selector in the upper-right corner to switch immediately between `中文` and `English`. Window text, buttons, table headings, status messages, validation errors, and subsequently opened dialogs follow the selected language.
+
+### Pi configuration directory
+
+The application locates Pi's configuration directory in this order:
+
+1. The `-AgentDirectory` command-line argument
+2. The `PI_CODING_AGENT_DIR` environment variable
+3. `%USERPROFILE%\.pi\agent`
+
+It manages `models.json` and `auth.json` inside that directory. The optional argument or environment variable can be used to target another Pi configuration directory.
+
+### Features and security boundaries
+
+- Add, edit, rename, and remove third-party providers
+- Add, rename, and remove models
+- Switch the GUI between Chinese and English at runtime
+- Enter API keys through password fields; keys are not displayed in lists or logs
+- Keep OAuth and other non-API-key credentials read-only
+- Preserve protected credentials when their custom provider is removed
+- Warn before opening the potentially sensitive `auth.json` file
+- Detect concurrent file changes and use atomic writes with rollback protection
+
+The release repository contains only `.gitignore`, `README.md`, `start.cmd`, `pi-model-manager.ps1`, and `tests/`. It must not contain generated `auth.json`, `models.json`, logs, temporary files, real API keys, tokens, passwords, or machine-generated configuration.
+
+### Tests
+
+Run the standalone CRUD and bilingual WinForms smoke tests:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\smoke-test.ps1
+```
+
+Run the complete release-readiness check, including privacy checks and a portable copy test from a temporary path containing spaces:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\release-readiness-test.ps1
+```
+
+The portable copy test is an automated simulation. It does not claim that the project has been manually verified on a second physical computer.
